@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Comparator.*;
+
+
+
 
 public class DataTask{
 
@@ -123,7 +125,7 @@ public class DataTask{
     }
 
 
-    public static void main( String[] args ) {
+    public static void main( String... args ) {
 
         BufferedReader br = null;
         List<DataModel> dataModels = new ArrayList<DataModel>();
@@ -136,6 +138,7 @@ public class DataTask{
 
 
                 DataModel line = ReadJSONFile(sCurrentLine);
+
                 Optional<DataModel.Records> record = line.getRecords().stream().findFirst();
                 if(record.isPresent())
                 {
@@ -156,7 +159,7 @@ public class DataTask{
             Map<Integer, Map.Entry<String, Integer>> maxAv_bikeAvailStationAllTime = new HashMap();
             Map<Integer, Map.Entry<String, Integer>> maxAv_dockFreeStationAllTime = new HashMap();
 
-            List<String> listTask = new ArrayList<>() ;
+            List<String> listTask = new ArrayList<>();
             listTask.add("available bikes");
             listTask.add("free docks");
 
