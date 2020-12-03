@@ -40,11 +40,7 @@ public class DataTask{
         Map.Entry<K, V> entryWithMaxValue = null;
 
         for (Map.Entry<K, V> currentEntry : map.entrySet()) {
-            if (
-                    entryWithMaxValue == null
-                            || currentEntry.getValue()
-                            .compareTo(entryWithMaxValue.getValue())
-                            > 0) {
+            if (entryWithMaxValue == null || currentEntry.getValue().compareTo(entryWithMaxValue.getValue())> 0){
                 entryWithMaxValue = currentEntry;
             }
         }
@@ -194,10 +190,11 @@ public class DataTask{
                         }
                         stationWiseDockFree.get(stationName).add(tot_dock);
                    }
-
                 }
 
-                for(Map.Entry<String, List> entry : stationWiseDockFree.entrySet()) {
+
+ //Finding out the total number of bikes available per station. Later on, it will be associated by hour like others.
+                for(Map.Entry<String, List> entry : stationWiseBikeAvail.entrySet()) {
                     String key2 = entry.getKey();
                     for (Object value2 : entry.getValue()) {
                         if (bikeAvailTotalPerStation.get(key2) == null) {
@@ -217,7 +214,7 @@ public class DataTask{
                 maxAv_bikeAvailStationAllTime.put(hour,getMaxEntryInMapBasedOnValue(av_BikeAvail));
                 maxAv_dockFreeStationAllTime.put(hour,getMaxEntryInMapBasedOnValue(av_DockFree));
             }
-            int z = 0;
+
             List<Map<Integer, Map<String, Integer>>> list_av_allTime = new ArrayList<>() ;
 
             list_av_allTime.add(av_bikeAvailAllTime);
