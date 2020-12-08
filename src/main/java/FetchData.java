@@ -22,7 +22,7 @@ public class FetchData{
 
 
     public void FetchData(){
-//        this.result = result;
+ //        this.result = result;
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
