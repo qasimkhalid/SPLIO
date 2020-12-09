@@ -15,8 +15,7 @@ import java.util.stream.Collectors;
 
 public class DataTask{
 
-    public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> map)
-    {
+    public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> map){
         List<Map.Entry<String, Integer> > list =
                 new LinkedList<Map.Entry<String, Integer> >(map.entrySet());
 
@@ -35,8 +34,7 @@ public class DataTask{
     }
 
 
-    public static <K, V extends Comparable<V> > Map.Entry<K, V> getMaxEntryInMapBasedOnValue(Map<K, V> map)
-    {
+    public static <K, V extends Comparable<V> > Map.Entry<K, V> getMaxEntryInMapBasedOnValue(Map<K, V> map){
         Map.Entry<K, V> entryWithMaxValue = null;
 
         for (Map.Entry<K, V> currentEntry : map.entrySet()) {
@@ -51,13 +49,12 @@ public class DataTask{
 
         Map<String, Integer> newMap = new HashMap<>();
 
-        double average;
-        double sum = 0;
-        int counter = 0;
-
         for (Map.Entry<String, List> entry: map.entrySet()) {
 
-            //Fills the list 'value', with the values from the map entry.
+            double average;
+            double sum = 0;
+            int counter = 0;
+
             List<Integer> value = entry.getValue();
             String key = entry.getKey();
 
@@ -73,7 +70,7 @@ public class DataTask{
         return newMap;
     }
 
-    public static DataModel ReadJSONFile( String JSONString) {
+    public static DataModel ReadJSONFile( String JSONString){
 
         JSONParser parser = new JSONParser();
 
@@ -88,26 +85,26 @@ public class DataTask{
             e.printStackTrace();
         }
 
-        JSONObject obj_json = (JSONObject) obj ;
-        JSONArray arr_records = (JSONArray) obj_json.get("records");
+        JSONObject objJSON = (JSONObject) obj ;
+        JSONArray arrayRecords = (JSONArray) objJSON.get("records");
 
 
         List<DataModel.Records> recordsList = new ArrayList<DataModel.Records>();
 
-        for (int i = 0; i < arr_records.size(); i++) {
+        for (int i = 0; i < arrayRecords.size(); i++) {
             records = JSONdataModel.new Records();
-            records.setRecord_timestamp(((JSONObject)arr_records.get(i)).get("record_timestamp").toString());
+            records.setRecord_timestamp(((JSONObject)arrayRecords.get(i)).get("record_timestamp").toString());
 
 
-            JSONObject obj_fields = (JSONObject) ((JSONObject)arr_records.get(i)).get("fields");
+            JSONObject objFields = (JSONObject) ((JSONObject)arrayRecords.get(i)).get("fields");
 
             fieldsValues = JSONdataModel.new Fields();
 
-            fieldsValues.setStation_name((String) obj_fields.get("station_name".toString()));
-            fieldsValues.setStation_code(Integer.parseInt((String) obj_fields.get("station_code")));
+            fieldsValues.setStation_name((String) objFields.get("station_name".toString()));
+            fieldsValues.setStation_code(Integer.parseInt((String) objFields.get("station_code")));
 
-            int totAvailBike = (int) (long) ((Long) obj_fields.get("nbbike") + (Long) obj_fields.get("nbebike"));
-            int totFreeDock = (int) (long) ((Long) obj_fields.get("nbfreeedock") + (Long) obj_fields.get("nbfreedock"));
+            int totAvailBike = (int) (long) ((Long) objFields.get("nbbike") + (Long) objFields.get("nbebike"));
+            int totFreeDock = (int) (long) ((Long) objFields.get("nbfreeedock") + (Long) objFields.get("nbfreedock"));
 
             fieldsValues.setTotalAvailBike(totAvailBike);
             fieldsValues.setTotalFreeDock(totFreeDock);
@@ -153,15 +150,15 @@ public class DataTask{
             }
         }
 
-        Map<Optional<Integer>, List<DataModel>> groupedByHour = dataModels.stream()
+        Map<Integer, List<DataModel>> groupedByHour = dataModels.stream()
                 .filter(p -> p.getTimeStamp() != null && p.getTimeStamp().getHour() != 0)
-                .collect(Collectors.groupingBy(l->Optional.ofNullable(l.getTimeStamp().getHour())));
+                .collect(Collectors.groupingBy(l->(l.getTimeStamp().getHour())));
 
-        Map<Integer, Map<String, Integer>> av_bikeAvailAllTime = new HashMap();
-        Map<Integer, Map<String, Integer>> av_dockFreeAllTime = new HashMap();
+        Map<Integer, Map<String, Integer>> avgBikeAvailAllTime = new HashMap();
+        Map<Integer, Map<String, Integer>> avgDockFreeAllTime = new HashMap();
 
-        Map<Integer, Map.Entry<String, Integer>> maxAv_bikeAvailStationAllTime = new HashMap();
-        Map<Integer, Map.Entry<String, Integer>> maxAv_dockFreeStationAllTime = new HashMap();
+        Map<Integer, Map.Entry<String, Integer>> maxAvgBikeAvailStationAllTime = new HashMap();
+        Map<Integer, Map.Entry<String, Integer>> maxAvgDockFreeStationAllTime = new HashMap();
 
         List<String> listTask = new ArrayList<>();
         listTask.add("available bikes");
@@ -172,7 +169,6 @@ public class DataTask{
 
         for(Object key : groupedByHour.keySet()) {
             List value = groupedByHour.get(key);
-            Integer hour = Integer.parseInt((key.toString().substring(9, key.toString().length() - 1)));
 
             Map<String, List> stationWiseBikeAvail = new HashMap<>();
             Map<String, List> stationWiseDockFree = new HashMap<>();
@@ -184,19 +180,19 @@ public class DataTask{
                 recordsList = records.getRecords();
 
                 for (int j = 0; j < recordsList.size(); j++) {
-                    int tot_bike = (recordsList.get(j).getFields().getTotalAvailBike());
-                    int tot_dock = (recordsList.get(j).getFields().getTotalFreeDock());
+                    int totalBike = (recordsList.get(j).getFields().getTotalAvailBike());
+                    int totalDock = (recordsList.get(j).getFields().getTotalFreeDock());
                     String stationName = recordsList.get(j).getFields().getStation_name();
 
                     if (stationWiseBikeAvail.get(stationName) == null) {
                         stationWiseBikeAvail.put(stationName, new ArrayList<Integer>());
                     }
-                    stationWiseBikeAvail.get(stationName).add(tot_bike);
+                    stationWiseBikeAvail.get(stationName).add(totalBike);
 
                     if (stationWiseDockFree.get(stationName) == null) {
                         stationWiseDockFree.put(stationName, new ArrayList<Integer>());
                     }
-                    stationWiseDockFree.get(stationName).add(tot_dock);
+                    stationWiseDockFree.get(stationName).add(totalDock);
                }
             }
 
@@ -207,44 +203,45 @@ public class DataTask{
                 for (Object value2 : entry.getValue()) {
                     if (bikeAvailTotalPerStation.get(key2) == null) {
                         bikeAvailTotalPerStation.put(key2, (Integer) value2);
+                    }else{
+                        bikeAvailTotalPerStation.merge(key2, (Integer) value2, ( oldValue, newValue ) -> oldValue + newValue);
                     }
-                    bikeAvailTotalPerStation.merge(key2, (Integer) value2, (oldValue, newValue) -> oldValue + newValue);
                 }
             }
 
 
-            Map<String, Integer> av_BikeAvail = getAverage(stationWiseBikeAvail);
-            Map<String, Integer> av_DockFree = getAverage(stationWiseDockFree);
+            Map<String, Integer> avgBikeAvail = getAverage(stationWiseBikeAvail);
+            Map<String, Integer> avgDockFree = getAverage(stationWiseDockFree);
 
-            av_bikeAvailAllTime.put(hour,av_BikeAvail);
-            av_dockFreeAllTime.put(hour,av_DockFree);
+            avgBikeAvailAllTime.put((Integer) key, avgBikeAvail);
+            avgDockFreeAllTime.put((Integer) key,avgDockFree);
 
-            maxAv_bikeAvailStationAllTime.put(hour,getMaxEntryInMapBasedOnValue(av_BikeAvail));
-            maxAv_dockFreeStationAllTime.put(hour,getMaxEntryInMapBasedOnValue(av_DockFree));
+            maxAvgBikeAvailStationAllTime.put((Integer) key,getMaxEntryInMapBasedOnValue(avgBikeAvail));
+            maxAvgDockFreeStationAllTime.put((Integer) key,getMaxEntryInMapBasedOnValue(avgDockFree));
         }
 
-        List<Map<Integer, Map<String, Integer>>> list_av_allTime = new ArrayList<>() ;
+        List<Map<Integer, Map<String, Integer>>> listAvgAllTime = new ArrayList<>() ;
 
-        list_av_allTime.add(av_bikeAvailAllTime);
-        list_av_allTime.add(av_dockFreeAllTime);
+        listAvgAllTime.add(avgBikeAvailAllTime);
+        listAvgAllTime.add(avgDockFreeAllTime);
 
-        List<Map<Integer, Map.Entry<String, Integer>>> list_maxAv_allTime = new ArrayList<>() ;
+        List<Map<Integer, Map.Entry<String, Integer>>> listMaxAvgAllTime = new ArrayList<>() ;
 
-        list_maxAv_allTime.add(maxAv_bikeAvailStationAllTime);
-        list_maxAv_allTime.add(maxAv_dockFreeStationAllTime);
+        listMaxAvgAllTime.add(maxAvgBikeAvailStationAllTime);
+        listMaxAvgAllTime.add(maxAvgDockFreeStationAllTime);
 
-        for (int i = 0; i < list_maxAv_allTime.size(); i++) {
+        for (int i = 0; i < listMaxAvgAllTime.size(); i++) {
             int max = 0;
             int hour = 0;
-            String station_name = null;
-            Set set = list_maxAv_allTime.get(i).entrySet();
+            String stationName = null;
+            Set set = listMaxAvgAllTime.get(i).entrySet();
             Iterator j = set.iterator();
             while(j.hasNext()) {
                 Map.Entry first = (Map.Entry)j.next();
                 Map.Entry second = (Map.Entry)first.getValue();
                 if((int) second.getValue() > max || max == 0){
                     hour = (int) first.getKey();
-                    station_name = (String) second.getKey();
+                    stationName = (String) second.getKey();
                     max = (int) second.getValue();
                 }
             }
@@ -252,31 +249,29 @@ public class DataTask{
             System.out.println("------");
             System.out.println("Average number of " + listTask.get(i) + " per station per day’s hour:");
 
-           for (Map.Entry<Integer, Map<String, Integer>> entry : list_av_allTime.get(i).entrySet()) {
+           for (Map.Entry<Integer, Map<String, Integer>> entry : listAvgAllTime.get(i).entrySet()) {
                 System.out.println(entry.getKey() + ":00h ---- Stations: " + entry.getValue().toString());
             }
 
             System.out.println("------");
             System.out.println("The station that has the most " + listTask.get(i) + " at hour:");
-            System.out.println(" \"" +station_name + "\" " + "has the most number of "+ listTask.get(i) + " = " + max  + ", at " + hour + ":00h.");
+            System.out.println(" \"" +stationName + "\" " + "has the most number of "+ listTask.get(i) + " = " + max  + ", at " + hour + ":00h.");
             System.out.println("------");
             System.out.println();
         }
 
         System.out.println("Top 3 Velib’ stations with the most available bikes per day:");
-        Map<String, Integer> bikeAvailTotalPerStation_sorted = sortByValue((HashMap<String, Integer>) bikeAvailTotalPerStation);
+        Map<String, Integer> bikeAvailTotalPerStationSorted = sortByValue((HashMap<String, Integer>) bikeAvailTotalPerStation);
 
-        ArrayList<String> keyList = new ArrayList<String>(bikeAvailTotalPerStation_sorted.keySet());
-        ArrayList<Integer> valueList = new ArrayList<Integer>(bikeAvailTotalPerStation_sorted.values());
+        ArrayList<String> keyList = new ArrayList<String>(bikeAvailTotalPerStationSorted.keySet());
+        ArrayList<Integer> valueList = new ArrayList<Integer>(bikeAvailTotalPerStationSorted.values());
 
-        List<String> tail_keyList = keyList.subList(Math.max(keyList.size() - 3, 0), keyList.size());
-        List<Integer> tail_valueList = valueList.subList(Math.max(valueList.size() - 3, 0), valueList.size());
-        for (int k = 0; k < tail_keyList.size() ; k++) {
-            System.out.println(tail_keyList.get(k) +" with " + tail_valueList.get(k)+ " bikes. ");
+        List<String> tailKeyList = keyList.subList(Math.max(keyList.size() - 3, 0), keyList.size());
+        List<Integer> tailValueList = valueList.subList(Math.max(valueList.size() - 3, 0), valueList.size());
+        for (int k = 0; k < tailKeyList.size() ; k++) {
+            System.out.println(tailKeyList.get(k) +" with " + tailValueList.get(k)+ " bikes. ");
         }
         System.out.println("------");
-
-
 
     }
 
