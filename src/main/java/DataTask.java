@@ -2,16 +2,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-
-
-
-
 
 public class DataTask{
 
@@ -103,11 +98,11 @@ public class DataTask{
             fieldsValues.setStation_name((String) objFields.get("station_name".toString()));
             fieldsValues.setStation_code(Integer.parseInt((String) objFields.get("station_code")));
 
-            int totAvailBike = (int) (long) ((Long) objFields.get("nbbike") + (Long) objFields.get("nbebike"));
-            int totFreeDock = (int) (long) ((Long) objFields.get("nbfreeedock") + (Long) objFields.get("nbfreedock"));
+            int totalAvailBike = (int) (long) ((Long) objFields.get("nbbike") + (Long) objFields.get("nbebike"));
+            int totalFreeDock = (int) (long) ((Long) objFields.get("nbfreeedock") + (Long) objFields.get("nbfreedock"));
 
-            fieldsValues.setTotalAvailBike(totAvailBike);
-            fieldsValues.setTotalFreeDock(totFreeDock);
+            fieldsValues.setTotalAvailBike(totalAvailBike);
+            fieldsValues.setTotalFreeDock(totalFreeDock);
 
             recordsList.add(records);
             records.setFields(fieldsValues);
