@@ -155,9 +155,7 @@ public class DataTask{
         Map<Integer, Map.Entry<String, Integer>> maxAvgBikeAvailStationAllTime = new HashMap();
         Map<Integer, Map.Entry<String, Integer>> maxAvgDockFreeStationAllTime = new HashMap();
 
-        List<String> listTask = new ArrayList<>();
-        listTask.add("available bikes");
-        listTask.add("free docks");
+
 
 
         Map<String, Integer> bikeAvailTotalPerStation = new HashMap();
@@ -224,6 +222,10 @@ public class DataTask{
 
         listMaxAvgAllTime.add(maxAvgBikeAvailStationAllTime);
         listMaxAvgAllTime.add(maxAvgDockFreeStationAllTime);
+
+        List<String> listTask = new ArrayList<>();
+        listTask.add("available bikes");
+        listTask.add("free docks");
 
         for (int i = 0; i < listMaxAvgAllTime.size(); i++) {
             int max = 0;
